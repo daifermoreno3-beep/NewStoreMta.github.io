@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Admin - MTA Market</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-main-card">
+        <header class="admin-header">
+            <h1>PANEL <span>ADMIN</span></h1>
+            <div class="header-buttons">
+                <button class="btn-logs" onclick="location.href='logs.html'">LOGS</button>
+                <button class="btn-exit" onclick="location.href='home.html'">TIENDA</button>
+            </div>
+        </header>
+
+        <div class="admin-columns">
+            <div class="admin-left-col">
+                <section class="admin-box">
+                    <h3>Aprobar Solicitudes</h3>
+                    <div id="lista-solicitudes" class="admin-scroll-list"></div>
+                </section>
+
+                <section class="admin-box" style="margin-top: 20px;">
+                    <h3>Nuevo Mapeo</h3>
+                    <form id="form-mapeo">
+                        <input type="text" id="m-nombre" placeholder="Nombre" required>
+                        <input type="number" id="m-precio" placeholder="Precio USD" required>
+                        <input type="file" id="m-file" accept="image/*" required>
+                        <button type="submit" class="btn-publish">PUBLICAR</button>
+                    </form>
+                </section>
+            </div>
+
+            <section class="admin-box inventario-box">
+                <div class="inv-header">
+                    <h3>Inventario y Ventas</h3>
+                    <input type="text" id="busqueda-inv" placeholder="Buscar en inventario..." oninput="actualizarAdmin()">
+                </div>
+                <div id="lista-admin" class="admin-scroll-list"></div>
+            </section>
+
+            <section class="admin-box">
+                <h3>Estadísticas</h3>
+                <div id="estadisticas"></div>
+            </section>
+
+            <section class="admin-box">
+                <h3>Auditoría</h3>
+                <div id="auditoria"></div>
+            </section>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Lógica de publicación mejorada
+        document.getElementById('form-mapeo').onsubmit = function(e) {
+            e.preventDefault();
+            const file = document.getElementById('m-file').files[0];
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                let db = obtenerDB();
+                const nombre = document.getElementById('m-nombre').value;
+                db.push({ 
+                    id: Date.now(), 
+                    nombre: nombre, 
+                    precio: document.getElementById('m-precio').value, 
+                    img: ev.target.result, 
+                    comprado: false, 
+                    enProceso: false, 
+                    comprador: null, 
+                    clienteIP: "" 
+                });
+                guardarDB(db);
+                registrarLog('Publicar mapeo', 'admin', `Mapeo: ${nombre}`);
+                alert("Publicado con éxito");
+                location.reload();
+            };
+            if(file) reader.readAsDataURL(file);
+        };
+
+        window.onload = actualizarAdmin;
+        cargarEstadisticas();
+        cargarAuditoria();
+    </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil - MTA Market</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">MTA<span>MARKET</span></div>
+        <div class="nav-right">
+            <button class="btn-nav" onclick="location.href='home.html'">Tienda</button>
+            <button class="btn-nav" onclick="location.href='mis-compras.html'">Mis Compras</button>
+            <button class="btn-nav" onclick="cerrarSesion()">Cerrar Sesión</button>
+            <div class="user-tag" id="user-display"></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Mi Perfil</h2>
+        <div id="perfil-info" style="background:#111; padding:20px; border-radius:10px; margin-bottom:30px;"></div>
+        <h3>Historial de Compras</h3>
+        <div id="historial-compras" style="margin-bottom:30px;"></div>
+        <h3>Historial de Acciones</h3>
+        <div id="historial-acciones"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        window.onload = () => {
+            const user = localStorage.getItem('usuario_logeado');
+            if(!user) { window.location.href = 'index.html'; return; }
+            document.getElementById('user-display').innerText = user;
+
+            // Información del perfil
+            const usuarios = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+            const usuario = usuarios.find(u => u.user === user);
+            document.getElementById('perfil-info').innerHTML = `
+                <p><strong>Usuario:</strong> ${user}</p>
+                <p><strong>Rango:</strong> ${usuario ? usuario.rango.toUpperCase() : 'USER'}</p>
+                <p><strong>Fecha de Registro:</strong> ${usuario ? 'No disponible' : 'No disponible'}</p>
+            `;
+
+            // Historial de compras
+            const db = obtenerDB();
+            const misMapeos = db.filter(m => m.comprador === user);
+            const comprasDiv = document.getElementById('historial-compras');
+            if(misMapeos.length === 0) {
+                comprasDiv.innerHTML = "<p>No has realizado compras aún.</p>";
+            } else {
+                comprasDiv.innerHTML = misMapeos.map(m => `
+                    <div class="card" style="display:flex; padding:20px; gap:20px; background:#111; border: 1px solid #222; margin-bottom:10px;">
+                        <img src="${m.img}" style="width:100px; height:80px; border-radius:5px;">
+                        <div style="flex-grow:1;">
+                            <h3>${m.nombre}</h3>
+                            <p>Precio: $${m.precio} USD</p>
+                            <p>Estado: ${m.comprado ? '<b style="color:lime;">APROBADO</b>' : '<b style="color:orange;">PENDIENTE</b>'}</p>
+                            <p>IP Vinculada: ${m.clienteIP || 'Ninguna'}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Historial de acciones
+            const logs = obtenerLogs().filter(l => l.usuario === user);
+            const accionesDiv = document.getElementById('historial-acciones');
+            if(logs.length === 0) {
+                accionesDiv.innerHTML = "<p>No hay acciones registradas.</p>";
+            } else {
+                accionesDiv.innerHTML = logs.reverse().map(l => `
+                    <div style="background:#1a1a1a; padding:15px; border-radius:8px; margin-bottom:10px; border-left:4px solid #ff0000;">
+                        <p><strong>${l.accion}</strong> - ${new Date(l.fecha).toLocaleString()}</p>
+                        <p>${l.detalles}</p>
+                    </div>
+                `).join('');
+            }
+        };
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">c:\Users\User\Desktop\pagina\profile.html

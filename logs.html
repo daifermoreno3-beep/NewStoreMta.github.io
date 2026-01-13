@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Logs - MTA Market</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-main-card" style="width: 90%;">
+        <header class="admin-header">
+            <h1>REGISTRO DE <span>LICENCIAS</span></h1>
+            <div class="header-buttons">
+                <button class="btn-exit" onclick="location.href='admin.html'">Cerrar</button>
+            </div>
+        </header>
+        <table style="width:100%; color:white; border-collapse:collapse;">
+            <thead>
+                <tr style="border-bottom:2px solid red;">
+                    <th>Mapeo</th><th>Estado</th><th>Cliente</th><th>IP</th><th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-logs"></tbody>
+        </table>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        function cargarLogs() {
+            const db = obtenerDB();
+            document.getElementById('tabla-logs').innerHTML = db.map(m => `
+                <tr style="border-bottom:1px solid #222;">
+                    <td>${m.nombre}</td>
+                    <td>${m.comprado ? 'Vendido' : (m.enProceso ? 'Pendiente' : 'Libre')}</td>
+                    <td>${m.comprador || '---'}</td>
+                    <td>${m.clienteIP || '---'}</td>
+                    <td>
+                        ${m.comprado && m.clienteIP ? `<button class="btn-logs" onclick="descargarLUA(${m.id}, '${m.nombre}', '${m.clienteIP}')">DESCARGAR LUA</button>` : '---'}
+                    </td>
+                </tr>`).join('');
+        }
+        window.onload = cargarLogs;
+    </script>
+</body>
+</html>

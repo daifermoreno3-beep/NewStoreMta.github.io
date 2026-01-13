@@ -1,0 +1,202 @@
+/* style.css - INTERFAZ PREMIUM ACTUALIZADA */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary: #ff0000;
+    --primary-glow: rgba(255, 0, 0, 0.4);
+    --bg: #050505;
+    --card-bg: #0f0f0f;
+    --text: #ffffff;
+    --border: #1a1a1a;
+    --grad: linear-gradient(135deg, #ff0000 0%, #8b0000 100%);
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Navbar Centrada y Elegante */
+.navbar {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-right {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.logo { font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; }
+.logo span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
+
+/* Buscador Estilizado */
+.search-box {
+    background: #111;
+    border: 1px solid #333;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 30px;
+    width: 350px;
+    outline: none;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.search-box:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
+
+/* Botones con Efecto Gamer */
+.btn-buy, .cat-btn, .btn-nav, .btn-nav-admin {
+    background: var(--grad);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-buy:hover, .cat-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px var(--primary-glow);
+    filter: brightness(1.2);
+}
+
+.btn-nav { background: #1a1a1a; border: 1px solid #333; font-size: 0.8rem; }
+.btn-nav-admin { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+
+/* Grid de Productos */
+.container { width: 90%; max-width: 1100px; margin: 50px auto; text-align: center; }
+
+#tienda-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    justify-content: center;
+}
+
+/* Tarjetas */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: 0.4s;
+}
+
+.card:hover { border-color: var(--primary); transform: scale(1.02); }
+
+.card img { width: 100%; height: 200px; object-fit: cover; }
+
+.card-content { padding: 25px; }
+
+.price { color: var(--primary); font-size: 1.5rem; font-weight: 700; margin: 15px 0; }
+
+/* User Tag */
+.user-tag {
+    background: var(--primary);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Login Styles */
+.auth-container {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    margin-top: 100px;
+}
+
+.logo-auth {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+}
+
+.logo-auth span {
+    color: var(--primary);
+    text-shadow: 0 0 10px var(--primary-glow);
+}
+
+.auth-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 10px;
+}
+
+.tab {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+    flex: 1;
+}
+
+.tab.active {
+    background: var(--grad);
+    border-color: var(--primary);
+    color: white;
+}
+
+.tab:hover {
+    border-color: var(--primary);
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.auth-form {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auth-form.active {
+    display: flex;
+}
+
+.auth-form input {
+    background: #111;
+    border: 1px solid #333;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    outline: none;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.auth-form input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.auth-form button {
+    margin-top: 10px;
+}

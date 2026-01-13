@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MTA Market - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <h2 class="logo-auth">MTA<span>MARKET</span></h2>
+        <div class="auth-tabs">
+            <div id="tab-login" class="tab active" onclick="switchTab('login')">ENTRAR</div>
+            <div id="tab-register" class="tab" onclick="switchTab('register')">REGISTRAR</div>
+        </div>
+        
+        <form id="loginForm" class="auth-form active">
+            <input type="text" id="logUser" placeholder="Usuario" required>
+            <input type="password" id="logPass" placeholder="Contraseña" required>
+            <button type="submit" class="btn-buy">INICIAR SESIÓN</button>
+        </form>
+
+        <form id="registerForm" class="auth-form">
+            <input type="text" id="regUser" placeholder="Usuario" required>
+            <input type="password" id="regPass" placeholder="Contraseña (Mín. 5 dígitos)" required>
+            <button type="submit" class="btn-buy">CREAR CUENTA</button>
+        </form>
+    </div>
+
+    <script>
+        // LISTA MAESTRA PERMANENTE
+        const ADMINS_MAESTROS = [{ user: "daifer", pass: "12345" }]; 
+
+        window.onload = function() {
+            const user = localStorage.getItem('usuario_logeado');
+            const tiempo = localStorage.getItem('tiempo_sesion');
+            if (user && tiempo && (Date.now() - tiempo < 172800000)) {
+                window.location.href = 'home.html';
+            }
+        };
+
+        function switchTab(t){
+            document.querySelectorAll('.tab, .auth-form').forEach(e=>e.classList.remove('active'));
+            document.getElementById('tab-'+t).classList.add('active');
+            document.getElementById(t+'Form').classList.add('active');
+        }
+
+        document.getElementById('registerForm').onsubmit = function(e){
+            e.preventDefault();
+            const u = document.getElementById('regUser').value;
+            const p = document.getElementById('regPass').value;
+            let db = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+            
+            if(db.find(x=>x.user === u)) return alert("El usuario ya existe");
+
+            // ASIGNACIÓN AUTOMÁTICA DE RANGO
+            let rango = (u === "daifer" || u.startsWith("Admin_")) ? "admin" : "user";
+            
+            db.push({user: u, pass: p, rango: rango});
+            localStorage.setItem('usuarios_db', JSON.stringify(db));
+            alert("Cuenta registrada como " + rango.toUpperCase());
+            switchTab('login');
+        };
+
+        document.getElementById('loginForm').onsubmit = function(e){
+            e.preventDefault();
+            const u = document.getElementById('logUser').value;
+            const p = document.getElementById('logPass').value;
+            let db = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+            
+            const maestro = ADMINS_MAESTROS.find(x => x.user === u && x.pass === p);
+            const registrado = db.find(x => x.user === u && x.pass === p);
+
+            if(maestro || registrado){
+                localStorage.setItem('usuario_logeado', u);
+                localStorage.setItem('tiempo_sesion', Date.now());
+                window.location.href = 'home.html';
+            } else {
+                alert("Usuario o contraseña incorrectos");
+            }
+        };
+    </script>
+</body>
+</html>

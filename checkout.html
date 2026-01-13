@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout - MTA Market</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container" style="max-width:400px; margin:auto; background:#111; padding:20px; border:1px solid red; border-radius:10px;">
+        <h2>Confirmar Solicitud</h2>
+        <div id="resumen"></div>
+        <button class="btn-buy" onclick="enviarSolicitud()" style="width:100%; margin-top:20px;">ENVIAR AL ADMIN</button>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        const temp = JSON.parse(localStorage.getItem('temp_compra'));
+        document.getElementById('resumen').innerHTML = `Mapeo: ${temp.nombre} <br> Total: $${temp.precio} USD`;
+        function enviarSolicitud() {
+            let db = obtenerDB();
+            const i = db.findIndex(x => x.id === temp.id);
+            db[i].enProceso = true;
+            db[i].comprador = localStorage.getItem('usuario_logeado');
+            guardarDB(db);
+            registrarLog('Solicitar compra', localStorage.getItem('usuario_logeado'), `Mapeo: ${temp.nombre}`);
+            alert("Solicitud enviada.");
+            window.location.href = 'home.html';
+        }
+    </script>
+</body>
+</html>

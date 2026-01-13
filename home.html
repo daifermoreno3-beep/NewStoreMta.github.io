@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MTA Market - Tienda</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">MTA<span>MARKET</span></div>
+        <div class="search-container">
+            <input type="text" id="buscador" class="search-box" placeholder="¿Qué mapeo buscas?" oninput="actualizarTienda(this.value)">
+        </div>
+        <div class="nav-right">
+            <button id="admin-btn" class="btn-nav-admin" onclick="location.href='admin.html'" style="display:none;">Panel Admin</button>
+            <button class="btn-nav" onclick="location.href='profile.html'">Perfil</button>
+            <button class="btn-nav" onclick="location.href='mis-compras.html'">Mis Compras</button>
+            <div class="user-tag" id="user-display"></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="tienda-grid" class="products-grid">
+            </div>
+    </div>
+
+    <div id="miModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('miModal').style.display='none'">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        window.onload = () => {
+            const user = localStorage.getItem('usuario_logeado');
+            if(!user) { window.location.href = 'index.html'; return; }
+            document.getElementById('user-display').innerText = user;
+
+            // Seguridad para daifer
+            if(user === "daifer" || user.startsWith("Admin_")) {
+                document.getElementById('admin-btn').style.display = "block";
+            }
+            actualizarTienda();
+        };
+    </script>
+</body>
+</html>
